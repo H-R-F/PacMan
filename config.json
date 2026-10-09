@@ -1,0 +1,9 @@
+# Configuration File for Pac-Man Game
+# 
+# Responsibility:
+# - Defines game settings, level dimensions, lives, score values, seed, and timers.
+# - Must support comments starting with '#' and optional C-style comments.
+# - If keys are missing or invalid, safe defaults should be applied by the config loader.
+#
+# Assigned Developer:
+# - P2

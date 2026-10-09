@@ -1,0 +1,10 @@
+# ==============================================================================
+# Python Project Dependencies
+#
+# Responsibility:
+# - List required runtime libraries (e.g. pygame / mlx, typing extensions).
+# - List development & quality assurance tools (flake8, mypy, pytest, pyinstaller).
+#
+# Assigned Developer:
+# - P2
+# ==============================================================================

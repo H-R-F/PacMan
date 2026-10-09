@@ -1,0 +1,12 @@
+# ==============================================================================
+# Git Ignore Configuration
+#
+# Responsibility:
+# - Exclude Python build/cache artifacts (__pycache__, *.pyc, .mypy_cache, .pytest_cache).
+# - Exclude virtual environment folders (.venv, env, venv).
+# - Exclude distribution & packaging outputs (dist/, build/, *.spec).
+# - Exclude runtime local highscore overwrites if required during development.
+#
+# Assigned Developer:
+# - P2
+# ==============================================================================
