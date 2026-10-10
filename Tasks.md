@@ -17,9 +17,9 @@
 ## 2. ToDo List b les Phases (Milestones)
 
 ### Phase 1: Setup, Architecture & Rules Setup
-- [ ] **P1 & P2**: Mtafqo 3la l-architecture d les classes w packages (`pacman/engine`, `pacman/ui`, etc.).
+- [X] **P1 & P2**: Mtafqo 3la l-architecture d les classes w packages (`pacman/engine`, `pacman/ui`, etc.).
 - [ ] **P2**: Cree l-`Makefile` kamel m3a ga3 les targets (`install`, `run`, `debug`, `clean`, `lint`, `lint-strict`).
-- [ ] **P2**: Cree l-`.flake8` w configure `mypy.ini` aw `pyproject.toml` bach kolchi ikoun strict mn n-nhar l-lowel.
+- [ ] **P2**: Cree `pyproject.toml` bach kolchi ikoun strict mn n-nhar l-lowel.
 - [ ] **P2**: Cree l-`.gitignore` (bach t-mne3 cache files, build folders, virtualenvs).
 - [ ] **P1**: Cree skeleton d les fichiers m3a type hints w docstrings (PEP 257 format).
 
