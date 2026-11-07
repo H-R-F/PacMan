@@ -7,3 +7,33 @@
 #
 # Assigned Developer:
 # - P2
+# Pac-Man configuration. Lines starting with # are comments.
+
+{
+    "highscore_filename": "highscores.txt",
+
+    "levels": [
+        {"width": 15, "height": 11},
+        {"width": 17, "height": 13},
+        {"width": 19, "height": 15},
+        {"width": 21, "height": 15},
+        {"width": 23, "height": 17},
+        {"width": 25, "height": 19},
+        {"width": 27, "height": 21},
+        {"width": 29, "height": 21},
+        {"width": 31, "height": 23},
+        {"width": 33, "height": 25}
+    ],
+
+    "lives": 3,
+
+    "pacgum": 0,
+
+    "points_per_pacgum": 10,
+    "points_per_super_pacgum": 50,
+    "points_per_ghost": 200,
+
+    "seed": 42,
+
+    "level_max_time": 90
+}
