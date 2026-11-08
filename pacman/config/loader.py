@@ -16,6 +16,9 @@
 # Assigned Developer:
 # - P2
 # """
+import json
+import os
+from typing import Any
 
 DEFAULTS = {
     "lives": 3,
@@ -32,16 +35,16 @@ DEFAULTS = {
 
     # (width, height) for each level
     "levels": [
-        (21, 21),
-        (23, 21),
-        (25, 21),
-        (25, 23),
-        (27, 23),
-        (27, 25),
-        (29, 25),
-        (29, 27),
-        (31, 27),
-        (31, 29),
+        (15, 11),
+        (17, 13),
+        (19, 15),
+        (21, 15),
+        (23, 17),
+        (25, 19),
+        (27, 21),
+        (29, 21),
+        (31, 23),
+        (33, 25)
     ],
 }
 
@@ -51,24 +54,17 @@ LIMITS = {
     "pacgum": (0, 10000),
     "level_max_time": (10, 999),
 
-    "width": (5, 45),
-    "height": (5, 35),
-
-    "points_per_pacgum": (0, 10000),
-    "points_per_super_pacgum": (0, 10000),
-    "points_per_ghost": (0, 10000),
+	"points_per_pacgum": (1, 100),
+	"points_per_super_pacgum": (1, 1000),
+	"points_per_ghost": (1, 1000),
 
     "seed": (0, 4294967295),
 
-    "levels": (10, 10),
+    "width": (5, 45),
+    "height": (5, 35),
+    "levels": (1, 10),
 }
 
-# FUNCTION read_text(path) -> text or NOTHING
-#     TRY open(path, encoding="utf-8") and read everything
-#     ON FileNotFoundError        -> warn("config file not found"); RETURN NOTHING
-#     ON OSError (permissions...) -> warn(reason);                  RETURN NOTHING
-#     ON UnicodeDecodeError       -> warn("file is not valid UTF-8"); RETURN NOTHING
-#     RETURN text
 
 def warn(message):
     print(f"[CONFIG] Warning: {message}")
@@ -78,45 +74,58 @@ def read_text(path):
     try:
         with open(path, "r", encoding="utf-8") as file:
             return file.read()
-
     except FileNotFoundError:
         warn("Config file not found.")
-
     except OSError as error:
         warn(f"Could not read config file: {error}")
-
     except UnicodeDecodeError:
         warn("Config file is not valid UTF-8.")
-
     return None
 
+
 def blank_comments(text):
-    for line in text.split():
-        if line[0] == "#" or line[0] == "//":
-            line.replace()
-    return "".join(line)
+    lines = []
+    for line in text.splitlines(keepends=True):
+        content = line.rstrip("\r\n")
+        newline = line[len(content):]
+        if content.lstrip().startswith("#") or content.lstrip().startswith("//"):
+            lines.append(" " * len(content) + newline)
+        else:
+            lines.append(line)
+    return "".join(lines)
 
-# FUNCTION blank_comments(text) -> text
-#     FOR EACH line IN text.splitlines(keep line endings)
-#         IF first non-space character of line is "#"   (or starts with "//")
-#             REPLACE the line's content with the same number of spaces, KEEP the newline
-#         ELSE keep line unchanged
-#     RETURN lines joined with ""
 
-# FUNCTION parse(text) -> dict or NOTHING
-#     TRY json.loads(text)
-#     ON JSONDecodeError e -> warn("invalid JSON at line {e.lineno}, column {e.colno}: {e.msg}")
-#                             RETURN NOTHING
-#     IF result is not a dict -> warn("top level must be an object { }"); RETURN NOTHING
-#     RETURN result
+def parse(text):
+    try:
+        result = json.loads(text)
+    except json.JSONDecodeError as e:
+        warn(f"Invalid JSON at line {e.lineno}, column {e.colno}: {e.msg}")
+        return None
+    if not isinstance(result, dict):
+        warn("Top level must be an object { }.")
+        return None
+    return result
 
-# FUNCTION read_setting(raw, key, expected type, (min, max), default) -> value
-#     IF key missing                       -> RETURN default  (quietly or with an info message)
-#     IF type is wrong (bool counts as wrong for int!) -> warn(key, value, "using default"); RETURN default
-#     IF value < min                       -> warn(key, value, "clamped to min"); RETURN min
-#     IF value > max                       -> warn(key, value, "clamped to max"); RETURN max
-#     RETURN value
 
+def read_setting(raw: dict[str, Any], key: str, expected_type: type, low: int, high: int, default: int) -> int:
+    if key not in raw:
+        return default
+    value = raw[key]
+    if isinstance(value, bool) or not isinstance(value, expected_type):
+        warn(f"{key} = {value!r} is not a valid {expected_type.__name__}; "
+             f"using default {default}")
+        return default
+    if value < low:
+        warn(f"{key} = {value} is below the minimum {low}; using {low}")
+        return low
+    if value > high:
+        warn(f"{key} = {value} is above the maximum {high}; using {high}")
+        return high
+    return value
+
+
+def read_levels(raw):
+    
 # FUNCTION read_levels(raw_list) -> list of (width, height)
 #     IF raw_list missing or not a list    -> warn; RETURN default levels
 #     levels = empty list
